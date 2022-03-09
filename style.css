@@ -1,0 +1,14 @@
+html {
+	background: #111;
+	scrollbar-width: none;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	line-height: 0;
+}
+
+iframe {
+	border: 0;
+}

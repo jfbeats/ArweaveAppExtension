@@ -1,0 +1,29 @@
+{
+	"name": "Arweave.app Extension",
+	"action": {
+		"default_popup": "popup.html"
+	},
+	"manifest_version": 3,
+	"version": "0.1",
+	"description": "Arweave.app browser extension",
+	"permissions": [
+		"tabs",
+		"activeTab",
+		"scripting"
+	],
+	"host_permissions": ["*://*/*"],
+	"content_scripts": [
+		{
+			"matches": ["*://*/*"],
+			"run_at": "document_start",
+			"js": ["content.js"]
+		}
+	],
+	"background": {
+		"service_worker": "serviceWorker.js"
+	},
+	"web_accessible_resources": [{
+		"resources": ["build/*"],
+		"matches": ["<all_urls>"]
+	}]
+}
