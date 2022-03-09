@@ -6,7 +6,7 @@ const run = async () => {
 	const { ArweaveWebWallet } = await import('arweave-wallet-connector')
 	if (arweaveWallet) { arweaveWallet.disconnect() }
 	arweaveWallet = new ArweaveWebWallet()
-	arweaveWallet.setUrl('http://localhost:8080')
+	arweaveWallet.setUrl('https://arweave.app')
 	arweaveWallet.connect()
 }
 
