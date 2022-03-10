@@ -4,10 +4,9 @@ let arweaveWallet: ArweaveWebWallet
 
 const run = async () => {
 	const { ArweaveWebWallet } = await import('arweave-wallet-connector')
-	if (arweaveWallet) { arweaveWallet.disconnect() }
-	arweaveWallet = new ArweaveWebWallet()
+	if (!arweaveWallet) { arweaveWallet = new ArweaveWebWallet() }
 	arweaveWallet.setUrl('https://arweave.app')
 	arweaveWallet.connect()
 }
 
-window.addEventListener('arweave-wallet-connector:connect', run)
+window.addEventListener('arweave-app-extension:connect', run)
