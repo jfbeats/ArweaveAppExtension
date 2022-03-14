@@ -6,6 +6,7 @@
 	"manifest_version": 3,
 	"version": "0.1",
 	"description": "Arweave.app browser extension",
+	"icons": {},
 	"permissions": [
 		"tabs",
 		"activeTab",
@@ -19,9 +20,6 @@
 			"js": ["content.js"]
 		}
 	],
-	"background": {
-		"service_worker": "serviceWorker.js"
-	},
 	"web_accessible_resources": [{
 		"resources": ["build/*"],
 		"matches": ["<all_urls>"]

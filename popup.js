@@ -3,12 +3,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const postExtension = async (subject) => {
 		const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-		return chrome.tabs.sendMessage(tabs[0].id, { from: 'popup', subject });
+		chrome.tabs.sendMessage(tabs[0].id, { from: 'popup', subject });
+		window.close()
 	};
 
 	const shareState = async () => {
 		const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-		return iframeWindow.postMessage({
+		iframeWindow.postMessage({
 			origin: new URL(tabs[0].url).origin,
 		});
 	};
