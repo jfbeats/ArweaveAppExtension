@@ -1,12 +1,14 @@
 {
-	"name": "Arweave.app Extension",
+	"name": "Arweave.app",
 	"action": {
 		"default_popup": "popup.html"
 	},
 	"manifest_version": 3,
 	"version": "0.1",
 	"description": "Arweave.app browser extension",
-	"icons": {},
+	"icons": {
+		"128": "arweaveViewSmall.png"
+	},
 	"permissions": [
 		"tabs",
 		"activeTab",
