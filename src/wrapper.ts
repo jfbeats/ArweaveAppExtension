@@ -15,7 +15,7 @@ const getAppInfo = () => {
 	const nodes = document.querySelectorAll("link[rel*='icon']") as NodeListOf<HTMLLinkElement>
 	const sorted = Array.from(nodes)
 		.sort((a, b) => +a.sizes?.value?.split('x')?.[0] - +b.sizes?.value?.split('x')?.[0])
-		.sort((a, b) => +(a.rel.includes('apple')) - +(b.rel.includes('apple')))
+		.sort((a, b) => +a.rel.includes('apple') - +b.rel.includes('apple'))
 		.reverse()
 	const logo = sorted[0]?.href
 	return { name, logo }
