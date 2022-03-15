@@ -11,7 +11,8 @@ const run = async () => {
 
 const getAppInfo = () => {
 	const hostData = window.location.host.split('.')
-	const name = hostData[hostData.length - 2] || hostData[0]
+	const hostName = hostData[hostData.length - 2] || hostData[0]
+	const name = hostName.charAt(0).toUpperCase() + hostName.slice(1)
 	const nodes = document.querySelectorAll("link[rel*='icon']") as NodeListOf<HTMLLinkElement>
 	const sorted = Array.from(nodes)
 		.sort((a, b) => +a.sizes?.value?.split('x')?.[0] - +b.sizes?.value?.split('x')?.[0])
