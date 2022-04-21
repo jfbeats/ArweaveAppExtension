@@ -17,6 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	top.window.addEventListener('message', e => {
 		if (e.source !== iframeWindow || e.origin !== 'https://arweave.app') { return };
 		if (e.data === 'arweave-app-extension:connect') { postExtension('connect'); };
-		if (e.data === 'arweave-app-extension:state') { shareState() };
+		if (e.data === 'arweave-app-extension:permissions') { chrome.runtime.openOptionsPage(); };
+		if (e.data === 'arweave-app-extension:state') { shareState(); };
 	});
 });

@@ -1,12 +1,21 @@
 import type { ArweaveWebWallet } from 'arweave-wallet-connector'
 
-let arweaveWallet: ArweaveWebWallet
+let arweaveWallet: InstanceType<typeof ArweaveWebWallet>
+let oldAddress: string
 
 const run = async () => {
 	const { ArweaveWebWallet } = await import('arweave-wallet-connector')
-	if (!arweaveWallet) { arweaveWallet = new ArweaveWebWallet(getAppInfo()) }
+	if (!arweaveWallet) {
+		arweaveWallet = new ArweaveWebWallet(getAppInfo())
+		arweaveWallet.on('change', address => {
+			if (!oldAddress) { return oldAddress = address }
+			oldAddress = address
+			dispatchEvent(new CustomEvent('walletSwitch', { detail: { address } }))
+		})
+	}
 	arweaveWallet.setUrl('https://arweave.app')
-	arweaveWallet.connect()
+	await arweaveWallet.connect()
+	dispatchEvent(new CustomEvent('arweaveWalletLoaded', { detail: {} }))
 }
 
 const getAppInfo = () => {
