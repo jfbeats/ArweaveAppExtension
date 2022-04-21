@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/content.ts"],
+  "sourcesContent": ["const el = document.createElement('script');\r\nel.src = chrome.runtime.getURL('build/wrapper.js');\r\nel.onload = () => el.remove();\r\n(document.head || document.documentElement).appendChild(el);\r\n\r\nchrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {\r\n\tif (msg.from !== 'popup') { return sendResponse() };\r\n\tif (msg.subject === 'connect') { window.dispatchEvent(new Event('arweave-app-extension:connect')) };\r\n\tsendResponse();\r\n});\r\n"],
+  "mappings": "MAAA,GAAM,GAAK,SAAS,cAAc,QAAQ,EAC1C,EAAG,IAAM,OAAO,QAAQ,OAAO,kBAAkB,EACjD,EAAG,OAAS,IAAM,EAAG,OAAO,EAC5B,AAAC,UAAS,MAAQ,SAAS,iBAAiB,YAAY,CAAE,EAE1D,OAAO,QAAQ,UAAU,YAAY,CAAC,EAAK,EAAQ,IAAiB,CACnE,GAAI,EAAI,OAAS,QAAW,MAAO,GAAa,EAChD,AAAI,EAAI,UAAY,WAAa,OAAO,cAAc,GAAI,OAAM,+BAA+B,CAAC,EAChG,EAAa,CACd,CAAC",
+  "names": []
+}

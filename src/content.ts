@@ -1,5 +1,5 @@
 const el = document.createElement('script');
-el.src = chrome.runtime.getURL('build/build.min.js');
+el.src = chrome.runtime.getURL('build/wrapper.js');
 el.onload = () => el.remove();
 (document.head || document.documentElement).appendChild(el);
 

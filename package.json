@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"description": "",
 	"type": "module",
-	"main": "content.js",
 	"scripts": {
 		"build": "node build.js"
 	},
@@ -12,6 +11,7 @@
 		"arweave-wallet-connector": "file:../ArweaveWalletConnector"
 	},
 	"devDependencies": {
+		"@types/chrome": "^0.0.181",
 		"esbuild": "^0.14.25",
 		"rimraf": "^3.0.2"
 	}

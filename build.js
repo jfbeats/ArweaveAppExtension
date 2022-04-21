@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { build } from 'esbuild'
 import rimraf from 'rimraf'
 
@@ -10,12 +11,12 @@ const clean = async () => {
 export const runBuild = async (doClean = false) => {
 	if (doClean) await clean()
 	build({
-		entryPoints: ['./src/wrapper.ts'],
+		entryPoints: fs.readdirSync("src").filter(src => src.endsWith(".ts")).map(file => 'src/' + file),
 		minify: true,
 		bundle: true,
 		platform: 'browser',
 		target: ['chrome58', 'firefox57', 'safari11', 'edge18'],
-		outfile: './build/build.min.js',
+		outdir: 'build',
 		sourcemap: true
 	}).catch((e) => {
 		console.log(e)

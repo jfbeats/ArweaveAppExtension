@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
 	const iframeWindow = document.querySelector('iframe').contentWindow;
 
-	const postExtension = async (subject) => {
+	const postExtension = async (subject: string) => {
 		const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
 		chrome.tabs.sendMessage(tabs[0].id, { from: 'popup', subject });
 		window.close()
