@@ -1,7 +1,39 @@
 import type { ArweaveWebWallet } from 'arweave-wallet-connector'
 
+const selector = [
+	'link[rel*="icon"][href]',
+	'link[rel="apple-touch-icon"][href]',
+	'link[rel="apple-touch-icon-precomposed"][href]',
+	'link[rel="apple-touch-startup-image"][href]',
+	'link[rel="mask-icon"][href]',
+	'link[rel="fluid-icon"][href]',
+	'meta[name="msapplication-TileImage"][content]',
+	'meta[itemprop="image"][content]',
+].join(', ')
+
 let arweaveWallet: InstanceType<typeof ArweaveWebWallet>
 let oldAddress: string
+
+const isSvg = (el: HTMLLinkElement & HTMLMetaElement) => {
+	const link = el.href || el.content
+	const arr = link.split('.')
+	return link.startsWith('data:image/svg') || arr[arr.length - 1] === 'svg'
+}
+
+const getAppInfo = () => {
+	const hostData = window.location.host.split('.')
+	const hostName = hostData[hostData.length - 2] || hostData[0]
+	const name = hostName.charAt(0).toUpperCase() + hostName.slice(1)
+	const nodes = document.querySelectorAll(selector) as NodeListOf<HTMLLinkElement & HTMLMetaElement>
+	const sorted = Array.from(nodes)
+		.reverse()
+		.sort((a, b) => +b.rel.includes('apple') - +a.rel.includes('apple'))
+		.sort((a, b) => +b.sizes?.value?.split('x')?.[0] - +a.sizes?.value?.split('x')?.[0])
+		.sort((a, b) => +isSvg(b) - +isSvg(a))
+	let logo = sorted[0]?.href || sorted[0]?.content
+	if (logo && !logo.includes('://') && !logo.startsWith('data:image')) { logo = location.origin + (logo[0] !== '/' ? '/' : '') + logo }
+	return { name, logo }
+}
 
 const run = async () => {
 	const { ArweaveWebWallet } = await import('arweave-wallet-connector')
@@ -16,19 +48,6 @@ const run = async () => {
 	arweaveWallet.setUrl('https://arweave.app')
 	await arweaveWallet.connect()
 	dispatchEvent(new CustomEvent('arweaveWalletLoaded', { detail: {} }))
-}
-
-const getAppInfo = () => {
-	const hostData = window.location.host.split('.')
-	const hostName = hostData[hostData.length - 2] || hostData[0]
-	const name = hostName.charAt(0).toUpperCase() + hostName.slice(1)
-	const nodes = document.querySelectorAll("link[rel*='icon']") as NodeListOf<HTMLLinkElement>
-	const sorted = Array.from(nodes)
-		.sort((a, b) => +a.sizes?.value?.split('x')?.[0] - +b.sizes?.value?.split('x')?.[0])
-		.sort((a, b) => +a.rel.includes('apple') - +b.rel.includes('apple'))
-		.reverse()
-	const logo = sorted[0]?.href
-	return { name, logo }
 }
 
 window.addEventListener('arweave-app-extension:connect', run)
