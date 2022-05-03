@@ -1,5 +1,7 @@
 import type { ArweaveWebWallet } from 'arweave-wallet-connector'
 
+
+
 const selector = [
 	'link[rel*="icon"][href]',
 	'link[rel="apple-touch-icon"][href]',
@@ -14,6 +16,8 @@ const selector = [
 let arweaveWallet: InstanceType<typeof ArweaveWebWallet>
 let oldAddress: string
 
+
+
 const isSvg = (el: HTMLLinkElement & HTMLMetaElement) => {
 	const link = el.href || el.content
 	const arr = link.split('.')
@@ -27,7 +31,7 @@ const getAppInfo = () => {
 	const nodes = document.querySelectorAll(selector) as NodeListOf<HTMLLinkElement & HTMLMetaElement>
 	const sorted = Array.from(nodes)
 		.reverse()
-		.sort((a, b) => +b.rel.includes('apple') - +a.rel.includes('apple'))
+		.sort((a, b) => +b.rel?.includes('apple') - +a.rel?.includes('apple'))
 		.sort((a, b) => +b.sizes?.value?.split('x')?.[0] - +a.sizes?.value?.split('x')?.[0])
 		.sort((a, b) => +isSvg(b) - +isSvg(a))
 	let logo = sorted[0]?.href || sorted[0]?.content
@@ -45,9 +49,11 @@ const run = async () => {
 			dispatchEvent(new CustomEvent('walletSwitch', { detail: { address } }))
 		})
 	}
-	arweaveWallet.setUrl('https://arweave.app')
+	arweaveWallet.setUrl('http://localhost:8080')
 	await arweaveWallet.connect()
 	dispatchEvent(new CustomEvent('arweaveWalletLoaded', { detail: {} }))
 }
+
+
 
 window.addEventListener('arweave-app-extension:connect', run)
