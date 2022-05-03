@@ -10,7 +10,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		iframeWindow.postMessage({
 			origin: new URL(tabs[0].url).origin,
 		}, remoteOrigin)
-		console.log('heu')
 	}
 	
 	
