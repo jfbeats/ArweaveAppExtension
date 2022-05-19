@@ -1,15 +1,13 @@
-const remoteOrigin = 'http://localhost:8080'
-
-
-
 window.addEventListener('DOMContentLoaded', () => {
-	const iframeWindow = document.querySelector('iframe').contentWindow
+	const iframe = document.querySelector('iframe')
+	const iframeWindow = iframe.contentWindow
+	iframe.src = process.env.remoteOrigin + '/extension'
 	
 	const shareState = async () => {
 		const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
 		iframeWindow.postMessage({
 			origin: new URL(tabs[0].url).origin,
-		}, remoteOrigin)
+		}, process.env.remoteOrigin)
 	}
 	
 	
@@ -21,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	top.window.addEventListener('message', e => {
-		if (e.source !== iframeWindow || e.origin !== remoteOrigin) { return }
+		if (e.source !== iframeWindow || e.origin !== process.env.remoteOrigin) { return }
 		if (e.data === 'arweave-app-extension:connect') { postMessageContent('connect') }
 		if (e.data === 'arweave-app-extension:permissions') { chrome.runtime.openOptionsPage() }
 		if (e.data === 'arweave-app-extension:state') { shareState() }

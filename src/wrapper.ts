@@ -1,5 +1,4 @@
 import type { ArweaveWebWallet } from 'arweave-wallet-connector'
-const remoteOrigin = 'http://localhost:8080'
 
 
 
@@ -50,7 +49,7 @@ const run = async () => {
 			dispatchEvent(new CustomEvent('walletSwitch', { detail: { address } }))
 		})
 	}
-	arweaveWallet.setUrl(remoteOrigin)
+	arweaveWallet.setUrl(process.env.remoteOrigin)
 	await arweaveWallet.connect()
 	dispatchEvent(new CustomEvent('arweaveWalletLoaded', { detail: {} }))
 }
