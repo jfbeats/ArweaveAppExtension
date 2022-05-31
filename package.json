@@ -8,13 +8,11 @@
 		"dev": "nodemon --ignore build --ext * build.js"
 	},
 	"author": "",
-	"dependencies": {
-		"arweave-wallet-connector": "file:../ArweaveWalletConnector"
-	},
 	"devDependencies": {
 		"@types/chrome": "^0.0.181",
+		"@types/node": "^17.0.36",
+		"arweave-wallet-connector": "^0.0.30",
 		"esbuild": "^0.14.25",
-		"nodemon": "^2.0.16",
-		"rimraf": "^3.0.2"
+		"nodemon": "^2.0.16"
 	}
 }

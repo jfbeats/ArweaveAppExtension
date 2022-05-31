@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 const injectWrapper = () => {
 	const el = document.createElement('script')
-	el.src = chrome.runtime.getURL('build/wrapper.js')
+	el.src = chrome.runtime.getURL('wrapper.js')
 	el.onload = () => { el.remove() }
 	(document.head || document.documentElement).appendChild(el)
 }

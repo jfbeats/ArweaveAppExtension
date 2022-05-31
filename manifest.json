@@ -20,11 +20,11 @@
 		{
 			"matches": ["<all_urls>"],
 			"run_at": "document_start",
-			"js": ["build/content.js"]
+			"js": ["content.js"]
 		}
 	],
 	"web_accessible_resources": [{
 		"matches": ["<all_urls>"],
-		"resources": ["build/*"]
+		"resources": ["wrapper.js"]
 	}]
 }

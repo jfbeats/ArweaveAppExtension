@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/content.ts"],
-  "sourcesContent": ["const postMessageWrapper = (subject: string) => window.dispatchEvent(new Event('arweave-app-extension:' + subject))\r\n\r\n\r\n\r\nchrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {\r\n\tif (msg.from !== 'popup') { return sendResponse() }\r\n\tif (msg.subject === 'connect') { postMessageWrapper('connect') }\r\n\tsendResponse()\r\n})\r\n\r\n\r\n\r\nconst injectWrapper = () => {\r\n\tconst el = document.createElement('script')\r\n\tel.src = chrome.runtime.getURL('build/wrapper.js')\r\n\tel.onload = () => { el.remove() }\r\n\t(document.head || document.documentElement).appendChild(el)\r\n}\r\ninjectWrapper()"],
-  "mappings": "MAAA,GAAM,GAAqB,AAAC,GAAoB,OAAO,cAAc,GAAI,OAAM,yBAA2B,CAAO,CAAC,EAIlH,OAAO,QAAQ,UAAU,YAAY,CAAC,EAAK,EAAQ,IAAiB,CACnE,GAAI,EAAI,OAAS,QAAW,MAAO,GAAa,EAChD,AAAI,EAAI,UAAY,WAAa,EAAmB,SAAS,EAC7D,EAAa,CACd,CAAC,EAID,GAAM,GAAgB,IAAM,CAC3B,GAAM,GAAK,SAAS,cAAc,QAAQ,EAC1C,EAAG,IAAM,OAAO,QAAQ,OAAO,kBAAkB,EACjD,EAAG,OAAS,IAAM,CAAE,EAAG,OAAO,CAAE,EAC/B,UAAS,MAAQ,SAAS,iBAAiB,YAAY,CAAE,CAC3D,EACA,EAAc",
-  "names": []
-}

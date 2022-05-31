@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/options.ts"],
-  "sourcesContent": ["navigator.mediaDevices.getUserMedia({ video: true }).then(stream => stream.getTracks().forEach(track => track.stop()))\r\n"],
-  "mappings": "MAAA,UAAU,aAAa,aAAa,CAAE,MAAO,EAAK,CAAC,EAAE,KAAK,GAAU,EAAO,UAAU,EAAE,QAAQ,GAAS,EAAM,KAAK,CAAC,CAAC",
-  "names": []
-}
