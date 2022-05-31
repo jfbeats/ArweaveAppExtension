@@ -1,19 +1,26 @@
+declare const browser: any
+
 window.addEventListener('DOMContentLoaded', () => {
 	const iframe = document.querySelector('iframe')
 	const iframeWindow = iframe.contentWindow
 	iframe.src = process.env.remoteOrigin + '/extension'
+
+	const getTabs = async () => {
+		let tabs
+		tabs ??= await chrome.tabs.query({ active: true, currentWindow: true })
+		tabs ??= await browser.tabs.query({ active: true, currentWindow: true })
+		return tabs
+	}
 	
 	const shareState = async () => {
-		const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+		const tabs = await getTabs()
 		iframeWindow.postMessage({
 			origin: new URL(tabs[0].url).origin,
 		}, process.env.remoteOrigin)
 	}
-	
-	
 
 	const postMessageContent = async (subject: string) => {
-		const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+		const tabs = await getTabs()
 		chrome.tabs.sendMessage(tabs[0].id, { from: 'popup', subject })
 		window.close()
 	}
