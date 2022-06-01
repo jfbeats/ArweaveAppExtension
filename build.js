@@ -55,12 +55,15 @@ const runManifest = (config) => {
 
 const runArchive = async (config) => {
 	if (!config.archive.name) { return }
-	try { fs.mkdirSync(config.archive.outdir) } catch (e) { }
-	const output = fs.createWriteStream(config.archive.outdir + '/' + config.archive.name)
-	const archive = archiver('zip', { zlib: { level: 9 } })
-	archive.pipe(output)
-	archive.directory(config.esbuild.outdir, false)
-	archive.finalize()
+	return new Promise(res => {
+		try { fs.mkdirSync(config.archive.outdir) } catch (e) { }
+		const output = fs.createWriteStream(config.archive.outdir + '/' + config.archive.name)
+		const archive = archiver('zip', { zlib: { level: 9 } })
+		output.on('close', () => res())
+		archive.pipe(output)
+		archive.directory(config.esbuild.outdir, false)
+		archive.finalize()
+	})
 }
 
 
