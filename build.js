@@ -16,8 +16,19 @@ for (const k in env) { define[`process.env.${k}`] = JSON.stringify(env[k]) }
 
 
 
+const versionNumber = () => {
+	const date = new Date()
+	const month = date.getMonth() + 1
+	const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+	const hours = date.getHours() === 0 ? '' : date.getHours()
+	const minutes = date.getMinutes() < 10 && hours ? '0' + date.getMinutes() : date.getMinutes()
+	return [manifest.version, date.getFullYear(), '' + month + day, '' + hours + minutes].join('.')
+}
+
+
+
 const baseConfig = {
-	version: manifest.version + '.' + new Date().toJSON().split('.')[0],
+	version: versionNumber(),
 	platform: null,
 	esbuild: {
 		minify: true,
