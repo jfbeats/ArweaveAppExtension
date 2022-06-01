@@ -54,7 +54,6 @@ const runManifest = (config) => {
 		manifest.manifest_version = 2
 		manifest.web_accessible_resources = manifest.web_accessible_resources.map(r => r.resources).flat()
 		manifest.browser_action = manifest.action
-		manifest.permissions = manifest.permissions.filter(p => !['scripting'].includes(p))
 		delete manifest.action
 		delete manifest.host_permissions
 	}

@@ -14,11 +14,8 @@
 		"128": "arweaveViewSmall.png"
 	},
 	"permissions": [
-		"tabs",
-		"activeTab",
-		"scripting"
+		"activeTab"
 	],
-	"host_permissions": ["<all_urls>"],
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
