@@ -1,23 +1,45 @@
 import fs from 'fs'
 import { build } from 'esbuild'
+import archiver from 'archiver'
 
 
+
+const manifest = JSON.parse(fs.readFileSync('manifest.json'))
+const args = process.argv.slice(2)
 
 const env = {}
-env.dev = false
+env.dev = args.includes('dev')
 env.remoteOrigin = env.dev ? 'http://localhost:8080' : 'https://arweave.app'
-
-
 
 const define = {}
 for (const k in env) { define[`process.env.${k}`] = JSON.stringify(env[k]) }
 
 
 
-const manifest = (target, config) => {
-	const json = fs.readFileSync('manifest.json')
-	const manifest = JSON.parse(json)
-	if (target.manifest_version === 2) {
+const baseConfig = {
+	version: manifest.version,
+	platform: null,
+	esbuild: {
+		minify: true,
+		bundle: true,
+		platform: 'browser',
+		target: ['chrome58', 'firefox57', 'safari11', 'edge18'],
+		outdir: 'build',
+		sourcemap: 'linked',
+		define
+	},
+	archive: {
+		outdir: 'archive',
+		name: 'build.zip',
+	}
+}
+
+
+
+const runManifest = (config) => {
+	const manifest = JSON.parse(fs.readFileSync('manifest.json'))
+	manifest.version = config.version
+	if (config.platform === 'firefox') {
 		manifest.manifest_version = 2
 		manifest.web_accessible_resources = manifest.web_accessible_resources.map(r => r.resources).flat()
 		manifest.browser_action = manifest.action
@@ -26,33 +48,41 @@ const manifest = (target, config) => {
 		delete manifest.host_permissions
 	}
 	const result = JSON.stringify(manifest, null, 2)
-	fs.mkdirSync(config.outdir)
-	fs.writeFileSync(config.outdir + '/manifest.json', result)
+	fs.writeFileSync(config.esbuild.outdir + '/manifest.json', result)
 }
 
 
 
-export const runBuild = (target, config) => {
-	fs.rmSync(config.outdir, { recursive: true, force: true })
-	manifest(target, config)
-	fs.readdirSync('static').forEach(file => fs.copyFileSync('static/' + file, config.outdir + '/' + file))
-	build({ ...config, entryPoints: fs.readdirSync('src').filter(src => src.endsWith('.ts')).map(file => 'src/' + file)})
-	.catch((e) => {
-		console.log(e)
-		process.exit(1)
-	})
+const runArchive = async (config) => {
+	try { fs.mkdirSync(config.archive.outdir) } catch (e) { }
+	const output = fs.createWriteStream(config.archive.outdir + '/' + config.archive.name)
+	const archive = archiver('zip', { zlib: { level: 9 } })
+	archive.pipe(output)
+	archive.directory(config.esbuild.outdir, false)
+	archive.finalize()
 }
 
 
 
-runBuild({
-	manifest_version: 3,
-}, {
-	minify: true,
-	bundle: true,
-	platform: 'browser',
-	target: ['chrome58', 'firefox57', 'safari11', 'edge18'],
-	outdir: 'build',
-	sourcemap: 'linked',
-	define
-})
+export const runBuild = async (config) => {
+	fs.rmSync(config.esbuild.outdir, { recursive: true, force: true })
+	fs.mkdirSync(config.esbuild.outdir)
+	runManifest(config)
+	fs.readdirSync('static').forEach(file => fs.copyFileSync('static/' + file, config.esbuild.outdir + '/' + file))
+	await build({ ...config.esbuild, entryPoints: fs.readdirSync('src').filter(src => src.endsWith('.ts')).map(file => 'src/' + file)})
+	.catch((e) => { console.log(e); process.exit(1) })
+	await runArchive(config)
+}
+
+
+
+const main = async () => {
+	baseConfig.version = baseConfig.version + '.' + new Date().toJSON().split('.')[0]
+	if (args.includes('dev')) { return runBuild(baseConfig) }
+	for (const platform of args) {
+		baseConfig.platform = platform
+		baseConfig.archive.name = platform + 'Build.zip'
+		await runBuild(baseConfig)
+	}
+}
+main()

@@ -1,16 +1,16 @@
 {
 	"name": "arweave-app-extension",
-	"version": "1.0.0",
 	"description": "",
 	"type": "module",
 	"scripts": {
-		"build": "node build.js",
-		"dev": "nodemon --ignore build --ext * build.js"
+		"build": "node build.js chrome firefox",
+		"dev": "nodemon --ignore build --ignore archive --ext * build.js dev"
 	},
 	"author": "",
 	"devDependencies": {
 		"@types/chrome": "^0.0.181",
 		"@types/node": "^17.0.36",
+		"archiver": "^5.3.1",
 		"arweave-wallet-connector": "^0.0.30",
 		"esbuild": "^0.14.25",
 		"nodemon": "^2.0.16"

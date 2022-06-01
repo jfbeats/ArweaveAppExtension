@@ -8,7 +8,7 @@
 		"open_in_tab": true
 	},
 	"manifest_version": 3,
-	"version": "0.1",
+	"version": "0.0.1",
 	"description": "Arweave.app browser extension",
 	"icons": {
 		"128": "arweaveViewSmall.png"

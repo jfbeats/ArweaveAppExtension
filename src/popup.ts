@@ -6,8 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	iframe.src = process.env.remoteOrigin + '/extension'
 
 	const getTabs = async () => {
-		let tabs
-		tabs ??= await chrome.tabs.query({ active: true, currentWindow: true })
+		let tabs = await chrome.tabs.query({ active: true, currentWindow: true })
 		tabs ??= await browser.tabs.query({ active: true, currentWindow: true })
 		return tabs
 	}
