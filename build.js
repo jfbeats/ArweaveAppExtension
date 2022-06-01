@@ -17,7 +17,7 @@ for (const k in env) { define[`process.env.${k}`] = JSON.stringify(env[k]) }
 
 
 const baseConfig = {
-	version: manifest.version,
+	version: manifest.version + '.' + new Date().toJSON().split('.')[0],
 	platform: null,
 	esbuild: {
 		minify: true,
@@ -54,6 +54,7 @@ const runManifest = (config) => {
 
 
 const runArchive = async (config) => {
+	if (!config.archive.name) { return }
 	try { fs.mkdirSync(config.archive.outdir) } catch (e) { }
 	const output = fs.createWriteStream(config.archive.outdir + '/' + config.archive.name)
 	const archive = archiver('zip', { zlib: { level: 9 } })
@@ -77,8 +78,11 @@ export const runBuild = async (config) => {
 
 
 const main = async () => {
-	baseConfig.version = baseConfig.version + '.' + new Date().toJSON().split('.')[0]
-	if (args.includes('dev')) { return runBuild(baseConfig) }
+	if (args.includes('dev')) {
+		baseConfig.platform = args[1] || 'chrome'
+		baseConfig.archive.name = ''
+		return runBuild(baseConfig)
+	}
 	for (const platform of args) {
 		baseConfig.platform = platform
 		baseConfig.archive.name = platform + 'Build.zip'
