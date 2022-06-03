@@ -21,7 +21,6 @@ window.addEventListener('DOMContentLoaded', () => {
 	const postMessageContent = async (subject: string) => {
 		const tabs = await getTabs()
 		chrome.tabs.sendMessage(tabs[0].id, { from: 'popup', subject })
-		window.close()
 	}
 
 	top.window.addEventListener('message', e => {
@@ -29,5 +28,6 @@ window.addEventListener('DOMContentLoaded', () => {
 		if (e.data === 'arweave-app-extension:connect') { postMessageContent('connect') }
 		if (e.data === 'arweave-app-extension:permissions') { chrome.runtime.openOptionsPage() }
 		if (e.data === 'arweave-app-extension:state') { shareState() }
+		if (e.data === 'arweave-app-extension:close') { window.close() }
 	});
 });

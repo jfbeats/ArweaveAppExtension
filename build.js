@@ -78,7 +78,7 @@ const runArchive = async (config) => {
 
 
 
-export const runBuild = async (config) => {
+const runBuild = async (config) => {
 	fs.rmSync(config.esbuild.outdir, { recursive: true, force: true })
 	fs.mkdirSync(config.esbuild.outdir)
 	runManifest(config)
@@ -90,15 +90,22 @@ export const runBuild = async (config) => {
 
 
 
+const initConfig = (platform, archiveName) => {
+	baseConfig.platform = platform
+	baseConfig.archive.name = archiveName
+	baseConfig.esbuild.define['process.env.platform'] = JSON.stringify(platform)
+}
+
+
+
 const main = async () => {
+	const devPlatform = 'chrome'
 	if (args.includes('dev')) {
-		baseConfig.platform = args[1] || 'chrome'
-		baseConfig.archive.name = ''
+		initConfig(args[1] || devPlatform, '')
 		return runBuild(baseConfig)
 	}
 	for (const platform of args) {
-		baseConfig.platform = platform
-		baseConfig.archive.name = platform + 'Build.zip'
+		initConfig(platform, platform + 'Build.zip')
 		await runBuild(baseConfig)
 	}
 }
