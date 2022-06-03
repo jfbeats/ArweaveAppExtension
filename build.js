@@ -51,6 +51,7 @@ const runManifest = (config) => {
 	const manifest = JSON.parse(fs.readFileSync('manifest.json'))
 	manifest.version = config.version
 	if (config.platform === 'firefox') {
+		manifest.browser_specific_settings = { gecko: { id: '{167f5c4a-4e51-4e7c-bb71-24f087e4cd83}' } }
 		manifest.manifest_version = 2
 		manifest.web_accessible_resources = manifest.web_accessible_resources.map(r => r.resources).flat()
 		manifest.browser_action = manifest.action
