@@ -3,13 +3,13 @@ on: workflow_dispatch
 jobs:
   deploy-chrome:
     runs-on: ubuntu-latest
-    environment: chrome
+    environment: Chrome
     steps:
       - run: npm install
       - run: npm run deploy:chrome
   deploy-firefox:
     runs-on: ubuntu-latest
-    environment: firefox
+    environment: Firefox
     steps:
       - run: npm install
       - run: npm run deploy:firefox
