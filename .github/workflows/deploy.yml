@@ -1,0 +1,14 @@
+name: Deploy
+jobs:
+  deploy-chrome:
+    runs-on: ubuntu-latest
+    environment: chrome
+    steps:
+      - run: npm install
+      - run: npm run deploy:chrome
+  deploy-firefox:
+    runs-on: ubuntu-latest
+    environment: firefox
+    steps:
+      - run: npm install
+      - run: npm run deploy:firefox
