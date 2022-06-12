@@ -14,7 +14,7 @@ const selector = [
 ].join(', ')
 
 let arweaveWallet: InstanceType<typeof ArweaveWebWallet>
-let oldAddress: string
+let oldAddress: string | undefined
 
 
 
@@ -49,7 +49,7 @@ const run = async () => {
 			dispatchEvent(new CustomEvent('walletSwitch', { detail: { address } }))
 		})
 	}
-	arweaveWallet.setUrl(process.env.remoteOrigin)
+	arweaveWallet.setUrl(process.env.remoteOrigin!)
 	await arweaveWallet.connect()
 	dispatchEvent(new CustomEvent('arweaveWalletLoaded', { detail: {} }))
 }
