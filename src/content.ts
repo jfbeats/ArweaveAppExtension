@@ -2,18 +2,17 @@ const postMessageWrapper = (subject: string) => window.dispatchEvent(new Event('
 
 
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-	if (msg.from !== 'popup') { return sendResponse() }
-	if (msg.subject === 'connect') { postMessageWrapper('connect') }
-	sendResponse()
+let injectWrapperPromise: Promise<void>
+const injectWrapper = () => injectWrapperPromise ??= new Promise<void>(res => {
+	const el = document.createElement('script')
+	el.src = chrome.runtime.getURL('wrapper.js')
+	el.onload = () => { el.remove(); res() }
+	(document.head || document.documentElement).appendChild(el)
 })
 
 
 
-const injectWrapper = () => {
-	const el = document.createElement('script')
-	el.src = chrome.runtime.getURL('wrapper.js')
-	el.onload = () => { el.remove() }
-	(document.head || document.documentElement).appendChild(el)
-}
-injectWrapper()
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+	if (msg.from !== 'popup') { return }
+	if (msg.subject === 'connect') { injectWrapper().then(() => postMessageWrapper('connect')).then(sendResponse) }
+})
