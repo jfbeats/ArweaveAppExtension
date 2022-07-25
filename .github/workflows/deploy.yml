@@ -5,20 +5,20 @@ jobs:
     runs-on: ubuntu-latest
     environment: Chrome
     steps:
-      - env:
-        CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
       - uses: actions/checkout@v3.0.2
       - run: npm install
       - run: npm run deploy:chrome
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
   deploy-firefox:
     runs-on: ubuntu-latest
     environment: Firefox
     steps:
-      - env:
-        WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
-        WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
       - uses: actions/checkout@v3.0.2
       - run: npm install
       - run: npm run deploy:firefox
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
